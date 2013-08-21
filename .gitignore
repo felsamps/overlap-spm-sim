@@ -11,3 +11,8 @@
 *.lai
 *.la
 *.a
+
+# Other files
+overlap-sim
+nbproject
+obj
