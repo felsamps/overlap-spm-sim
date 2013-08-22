@@ -1,13 +1,30 @@
 #ifndef CUDATA_H
 #define	CUDATA_H
 
-class CUData {
-public:
-    CUData();
-    CUData(const CUData& orig);
-    virtual ~CUData();
-private:
+#include <list>
+#include <map>
 
+#include "TypeDefs.h"
+#include "PUData.h"
+
+using namespace std;
+
+class CUData {
+private:
+    map<UInt, PUData*> refsPU;
+    UInt depth, x, y;
+public:
+    CUData(UInt depth, UInt x, UInt y);
+    
+    void insertPU(PUData* pu);
+    
+    void setY(UInt y);
+    UInt getY() const;
+    void setX(UInt x);
+    UInt getX() const;
+    void setDepth(UInt depth);
+    UInt getDepth() const;    
+    
 };
 
 #endif	/* CUDATA_H */
