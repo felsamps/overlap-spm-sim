@@ -36,8 +36,6 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 				break;
 			case 'i':	/*Ending of the frame (image)*/
 				
-				meData->report();
-				getchar();
 				return meData;
 				break;
 			case 'L':	/*Begining of CTU*/
@@ -52,6 +50,8 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 			case 'U':	/*Begining of CU*/
 				if( cuFlag ) {
 					ctuData->insertCU(cuData);
+				}
+				else {
 					cuFlag = true;
 				}
 				this->fp >> xCU >> yCU >> idDepth;
@@ -61,6 +61,8 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 			case 'P':	/*Begining of PU*/
 				if( puFlag and sizePart == 0) {
 					cuData->insertPU(puData);
+				}
+				else {
 					puFlag = true;
 				}
 				this->fp >> idPart >> sizePart >> idRefFrame;

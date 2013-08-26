@@ -19,14 +19,12 @@ TileData* MotionEstimationData::getTile(UInt idTile) {
 }
 
 void MotionEstimationData::insertRefFrame(UInt idRefFrame) {
-	this->refFrames.insert(idRefFrame);
+    this->refFrames.insert(idRefFrame);
 }
 
 void MotionEstimationData::report() {
 	for (int i = 0; i < this->tiles.size(); i++) {
-		cout << "TILE " << i << endl;
+        cout << "TILE " << i << endl;
 		this->tiles[i]->report();
-
-	}
-
+    }
 }

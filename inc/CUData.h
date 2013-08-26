@@ -14,7 +14,7 @@ private:
     map<UInt, PUData*> refsPU;
     UInt depth, x, y;
 public:
-    CUData(UInt depth, UInt x, UInt y);
+    CUData(UInt x, UInt y, UInt depth);
     
     void insertPU(PUData* pu);
     

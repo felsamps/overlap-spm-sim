@@ -4,6 +4,8 @@
 #include <vector>
 #include <cstdlib>
 #include <set>
+#include <iostream>
+#include <cstdio>
 
 #include "TypeDefs.h"
 #include "TileData.h"

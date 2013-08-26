@@ -3,13 +3,16 @@
 CTUData::CTUData(UInt x, UInt y) {
 	this->x = x;
 	this->y = y;
-	this->vectorCU.resize(4);
+	for (int i = 0; i < 4; i++) {
+		vector<CUData*> vec;
+		this->vectorCU.push_back(vec);
+	}
+
 }
 
 void CTUData::insertCU(CUData* cu) {
 	UInt depth = cu->getDepth();
-	vector<CUData*> vec = this->vectorCU[depth];
-	vec.push_back(cu);
+	this->vectorCU[depth].push_back(cu);
 }
 
 void CTUData::setY(UInt y) {

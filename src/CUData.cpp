@@ -1,6 +1,6 @@
 #include "../inc/CUData.h"
 
-CUData::CUData(UInt depth, UInt x, UInt y) {
+CUData::CUData(UInt x, UInt y, UInt depth) {
 	this->depth = depth;
 	this->x = x;
 	this->y = y;
