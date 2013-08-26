@@ -7,13 +7,9 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	
-	UInt wFrame = atoi(argv[1]);
-	UInt hFrame = atoi(argv[2]);
-	UInt numOfTiles = atoi(argv[3]);
-	UInt searchRange = atoi(argv[4]);
-	string traceFileName(argv[5]);
+	string traceFileName(argv[1]);
 	
-	TraceFileHandler* tfh = new TraceFileHandler(traceFileName, numOfTiles);
+	TraceFileHandler* tfh = new TraceFileHandler(traceFileName);
 	MotionEstimationData* med = tfh->parseNextFrame();
 	
 }

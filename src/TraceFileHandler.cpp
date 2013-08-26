@@ -1,8 +1,20 @@
 #include "../inc/TraceFileHandler.h"
 
-TraceFileHandler::TraceFileHandler(string name, UInt numOfTiles) {
-	this->fp.open(name.c_str(), fstream::in);
-	this->numOfTiles = numOfTiles;
+TraceFileHandler::TraceFileHandler(string name) {
+	this->fp.open(name.c_str(), fstream::in);		
+	this->xParseHeader();
+}
+
+void TraceFileHandler::xParseHeader() {
+	this->fp >> this->wFrame;
+	this->fp >> this->hFrame;
+	this->fp >> this->numTileColumns;
+	this->fp >> this->numTileRows;
+	this->fp >> this->searchRange;
+		
+	this->numOfTiles = this->numTileColumns * this->numTileRows;
+	this->numVerTilesBoundaries = this->numTileColumns - 1;
+	this->numHorTilesBoundaries = this->numTileRows - 1;
 }
 
 MotionEstimationData* TraceFileHandler::parseNextFrame() {
@@ -35,7 +47,7 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 				meData = new MotionEstimationData(idCurrFrame, this->numOfTiles);
 				break;
 			case 'i':	/*Ending of the frame (image)*/
-				
+				meData->report();
 				return meData;
 				break;
 			case 'L':	/*Begining of CTU*/
@@ -106,4 +118,36 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 		
 	}
 	
+}
+
+UInt TraceFileHandler::getNumHorTilesBoundaries() const {
+	return numHorTilesBoundaries;
+}
+
+UInt TraceFileHandler::getNumVerTilesBoundaries() const {
+	return numVerTilesBoundaries;
+}
+
+UInt TraceFileHandler::getNumOfTiles() const {
+	return numOfTiles;
+}
+
+UInt TraceFileHandler::getSearchRange() const {
+	return searchRange;
+}
+
+UInt TraceFileHandler::getNumTileRows() const {
+	return numTileRows;
+}
+
+UInt TraceFileHandler::getNumTileColumns() const {
+	return numTileColumns;
+}
+
+UInt TraceFileHandler::getHFrame() const {
+	return hFrame;
+}
+
+UInt TraceFileHandler::getWFrame() const {
+	return wFrame;
 }

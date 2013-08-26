@@ -16,15 +16,32 @@ using namespace std;
 
 class TraceFileHandler {
 private:
-    fstream fp;
-    map<UInt, MotionEstimationData*> mapME;
-    UInt numOfTiles;
+	fstream fp;
+	
+	UInt wFrame;
+	UInt hFrame;
+	UInt numTileColumns;
+	UInt numTileRows;
+	UInt searchRange;
+	UInt numOfTiles;
+	UInt numVerTilesBoundaries;
+	UInt numHorTilesBoundaries;
 
-    MotionEstimationData* xGetMotionEstimationDataEntry(UInt idRefFrame);
+	void xParseHeader();
+	MotionEstimationData* xGetMotionEstimationDataEntry(UInt idRefFrame);
     
 public:
-    TraceFileHandler(string name, UInt numOfTiles);
-    MotionEstimationData* parseNextFrame();
+	TraceFileHandler(string name);
+	MotionEstimationData* parseNextFrame();
+    
+	UInt getNumHorTilesBoundaries() const;
+    UInt getNumVerTilesBoundaries() const;
+    UInt getNumOfTiles() const;
+    UInt getSearchRange() const;
+    UInt getNumTileRows() const;
+    UInt getNumTileColumns() const;
+    UInt getHFrame() const;
+    UInt getWFrame() const;
 };
 
 #endif	/* TRACEFILEHANDLER_H */
