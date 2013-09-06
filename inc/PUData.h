@@ -2,6 +2,7 @@
 #define	PUDATA_H
 
 #include <list>
+#include <cstdlib>
 
 #include "TypeDefs.h"
 #include "Entry.h"
@@ -10,20 +11,23 @@ using namespace std;
 
 class PUData {
 private:
-    UInt idPart, sizePart, idRefFrame;
+    Int idPart, sizePart, idRefFrame;
+	Int xCenter, yCenter;
     list<Entry*> entries;
 public:
-    PUData(UInt idPart, UInt sizePart, UInt idRefFrame);
+    PUData(Int idPart, Int sizePart, Int idRefFrame);
     
     void insertEntry(Entry* e);
     Entry* getEntry();
     
-    void setIdRefFrame(UInt idRefFrame);
-    UInt getIdRefFrame() const;
-    void setSizePart(UInt sizePart);
-    UInt getSizePart() const;
-    void setIdPart(UInt idPart);
-    UInt getIdPart() const;
+    void setIdRefFrame(Int idRefFrame);
+    Int getIdRefFrame() const;
+    void setSizePart(Int sizePart);
+    Int getSizePart() const;
+    void setIdPart(Int idPart);
+    Int getIdPart() const;
+    Int getYCenter() const;
+    Int getXCenter() const;
 
 };
 

@@ -25,10 +25,10 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 	PUData* puData;
 	Entry* entry;
 	
-	UInt idCurrFrame, idTile;
-	UInt xCTU, yCTU;
-	UInt xCU, yCU, idDepth;
-	UInt idPart, sizePart, idRefFrame;
+	Int idCurrFrame, idTile;
+	Int xCTU, yCTU;
+	Int xCU, yCU, idDepth;
+	Int idPart, sizePart, idRefFrame;
 	
 	Int xFS, yFS;
 	Int xCand, yCand;
@@ -36,9 +36,7 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 	
 	char command;
 	
-	bool cuFlag = false, puFlag = false;
-	
-	while(1) {
+	while(!this->fp.eof()) {
 		this->fp >> command;
 		
 		switch(command) {
@@ -47,7 +45,6 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 				meData = new MotionEstimationData(idCurrFrame, this->numOfTiles);
 				break;
 			case 'i':	/*Ending of the frame (image)*/
-				meData->report();
 				return meData;
 				break;
 			case 'L':	/*Begining of CTU*/
@@ -60,28 +57,26 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 				break;
 				
 			case 'U':	/*Begining of CU*/
-				if( cuFlag ) {
-					ctuData->insertCU(cuData);
-				}
-				else {
-					cuFlag = true;
-				}
 				this->fp >> xCU >> yCU >> idDepth;
 				cuData = new CUData(xCU, yCU, idDepth);
 				
 				break;
+			case 'u':
+				ctuData->insertCU(cuData);
+				break;
+				
 			case 'P':	/*Begining of PU*/
-				if( puFlag and sizePart == 0) {
-					cuData->insertPU(puData);
-				}
-				else {
-					puFlag = true;
-				}
 				this->fp >> idPart >> sizePart >> idRefFrame;
 				puData = new PUData(idPart, sizePart, idRefFrame);
 				meData->insertRefFrame(idRefFrame);
-								
 				break;
+				
+			case 'p':
+				if(sizePart == 0) {
+					cuData->insertPU(puData);
+				}
+				break;
+				
 			case 'F':	/*TZ First Search*/
 				fp >> xFS >> yFS;
 				if( sizePart == 0 ) {
@@ -117,37 +112,38 @@ MotionEstimationData* TraceFileHandler::parseNextFrame() {
 		}
 		
 	}
+	return NULL;
 	
 }
 
-UInt TraceFileHandler::getNumHorTilesBoundaries() const {
+Int TraceFileHandler::getNumHorTilesBoundaries() const {
 	return numHorTilesBoundaries;
 }
 
-UInt TraceFileHandler::getNumVerTilesBoundaries() const {
+Int TraceFileHandler::getNumVerTilesBoundaries() const {
 	return numVerTilesBoundaries;
 }
 
-UInt TraceFileHandler::getNumOfTiles() const {
+Int TraceFileHandler::getNumOfTiles() const {
 	return numOfTiles;
 }
 
-UInt TraceFileHandler::getSearchRange() const {
+Int TraceFileHandler::getSearchRange() const {
 	return searchRange;
 }
 
-UInt TraceFileHandler::getNumTileRows() const {
+Int TraceFileHandler::getNumTileRows() const {
 	return numTileRows;
 }
 
-UInt TraceFileHandler::getNumTileColumns() const {
+Int TraceFileHandler::getNumTileColumns() const {
 	return numTileColumns;
 }
 
-UInt TraceFileHandler::getHFrame() const {
+Int TraceFileHandler::getHFrame() const {
 	return hFrame;
 }
 
-UInt TraceFileHandler::getWFrame() const {
+Int TraceFileHandler::getWFrame() const {
 	return wFrame;
 }

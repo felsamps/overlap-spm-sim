@@ -1,6 +1,7 @@
 #ifndef CUDATA_H
 #define	CUDATA_H
 
+#include <iostream>
 #include <list>
 #include <map>
 
@@ -11,20 +12,24 @@ using namespace std;
 
 class CUData {
 private:
-    map<UInt, PUData*> refsPU;
-    UInt depth, x, y;
+    map<Int, PUData*> refsPU;
+    Int size, depth, x, y;
 public:
-    CUData(UInt x, UInt y, UInt depth);
+    CUData(Int x, Int y, Int depth);
     
     void insertPU(PUData* pu);
+	PUData* getPU(Int idRefFrame);
+	
+    void setY(Int y);
+    Int getY() const;
+    void setX(Int x);
+    Int getX() const;
+    void setDepth(Int depth);
+    Int getDepth() const;
+    Int getSize() const;    
     
-    void setY(UInt y);
-    UInt getY() const;
-    void setX(UInt x);
-    UInt getX() const;
-    void setDepth(UInt depth);
-    UInt getDepth() const;    
-    
+	void report();
+	
 };
 
 #endif	/* CUDATA_H */

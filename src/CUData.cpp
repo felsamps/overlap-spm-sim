@@ -1,37 +1,59 @@
 #include "../inc/CUData.h"
 
-CUData::CUData(UInt x, UInt y, UInt depth) {
+CUData::CUData(Int x, Int y, Int depth) {
 	this->depth = depth;
 	this->x = x;
 	this->y = y;
+	this->size = (depth == 0) ? 64 :
+		(depth == 1) ? 32 :
+		(depth == 2) ? 16 :
+		8;
 }
 
 void CUData::insertPU(PUData* pu) {
-	UInt idRefFrame = pu->getIdRefFrame();
+	Int idRefFrame = pu->getIdRefFrame();
 	this->refsPU[idRefFrame] = pu;	
 }
 
-void CUData::setY(UInt y) {
+PUData* CUData::getPU(Int idRefFrame) {
+	if( this->refsPU.find(idRefFrame) != this->refsPU.end() ) {
+		return this->refsPU[idRefFrame];
+	}
+	else {
+		return NULL;
+	}
+	
+}
+
+void CUData::report() {
+	cout << "PUs " << this->refsPU.size() << endl;
+}
+
+void CUData::setY(Int y) {
 	this->y = y;
 }
 
-UInt CUData::getY() const {
+Int CUData::getY() const {
 	return y;
 }
 
-void CUData::setX(UInt x) {
+void CUData::setX(Int x) {
 	this->x = x;
 }
 
-UInt CUData::getX() const {
+Int CUData::getX() const {
 	return x;
 }
 
-void CUData::setDepth(UInt depth) {
+void CUData::setDepth(Int depth) {
 	this->depth = depth;
 }
 
-UInt CUData::getDepth() const {
+Int CUData::getDepth() const {
 	return depth;
+}
+
+Int CUData::getSize() const {
+	return size;
 }
 

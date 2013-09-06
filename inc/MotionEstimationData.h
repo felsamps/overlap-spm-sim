@@ -16,17 +16,20 @@ using namespace std;
 class MotionEstimationData {
 private:
     vector<TileData*> tiles;
-    set<UInt> refFrames;
+    set<Int> refFrames;
     
-    UInt numOfTiles, idCurrFrame;
+    Int numOfTiles, idCurrFrame;
 	    
 public:
-    MotionEstimationData(UInt idCurrFrame, UInt numOfTiles);
+    MotionEstimationData(Int idCurrFrame, Int numOfTiles);
     
-    TileData* getTile(UInt idTile);
-    void insertRefFrame(UInt idRefFrame);
+    TileData* getTile(Int idTile);
+    void insertRefFrame(Int idRefFrame);
     
     void report();
+    void setRefFrames(set<Int> refFrames);
+    set<Int> getRefFrames() const;
+    Int getIdCurrFrame() const;
     
 };
 

@@ -9,19 +9,20 @@ using namespace std;
 
 class CTUData {
 private:
-    vector<vector<CUData*> > vectorCU;
-    UInt x, y;
+	vector<CUData*> listCU;
+    Int x, y;
 public:
-    CTUData(UInt x, UInt y);
+    CTUData(Int x, Int y);
     
     void insertCU(CUData* cu);
     
-    void getCU();
+    CUData* getCU(Int id);
+	Int getNumOfCU();
     
-    void setY(UInt y);
-    UInt getY() const;
-    void setX(UInt x);
-    UInt getX() const;
+    void setY(Int y);
+    Int getY() const;
+    void setX(Int x);
+    Int getX() const;
     
     void report();
     

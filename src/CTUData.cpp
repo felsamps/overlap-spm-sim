@@ -1,39 +1,45 @@
 #include "../inc/CTUData.h"
 
-CTUData::CTUData(UInt x, UInt y) {
+CTUData::CTUData(Int x, Int y) {
 	this->x = x;
 	this->y = y;
-	for (int i = 0; i < 4; i++) {
-		vector<CUData*> vec;
-		this->vectorCU.push_back(vec);
-	}
-
+	this->listCU.clear();
 }
 
 void CTUData::insertCU(CUData* cu) {
-	UInt depth = cu->getDepth();
-	this->vectorCU[depth].push_back(cu);
+	Int depth = cu->getDepth();
+	this->listCU.push_back(cu);
 }
 
-void CTUData::setY(UInt y) {
+CUData* CTUData::getCU(Int id) {
+	return this->listCU[id];
+}
+
+Int CTUData::getNumOfCU() {
+	return this->listCU.size();
+}
+
+void CTUData::setY(Int y) {
 	this->y = y;
 }
 
-UInt CTUData::getY() const {
+Int CTUData::getY() const {
 	return y;
 }
 
-void CTUData::setX(UInt x) {
+void CTUData::setX(Int x) {
 	this->x = x;
 }
 
-UInt CTUData::getX() const {
+Int CTUData::getX() const {
 	return x;
 }
 
 
 void CTUData::report() {
-	for (int i = 0; i < 4; i++) {
-		cout << "Depth " << i << " " << vectorCU[i].size() << endl;
+	for(vector<CUData*>::iterator it = this->listCU.begin(); it != this->listCU.end(); it++) {
+		CUData* cu = (*it);
+		cu->report();
 	}
+	
 }

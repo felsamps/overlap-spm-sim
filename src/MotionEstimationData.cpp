@@ -1,6 +1,6 @@
 #include "../inc/MotionEstimationData.h"
 
-MotionEstimationData::MotionEstimationData(UInt idCurrFrame, UInt numOfTiles) {
+MotionEstimationData::MotionEstimationData(Int idCurrFrame, Int numOfTiles) {
 	this->idCurrFrame = idCurrFrame;
 	this->numOfTiles = numOfTiles;
 	this->refFrames.clear();
@@ -11,15 +11,16 @@ MotionEstimationData::MotionEstimationData(UInt idCurrFrame, UInt numOfTiles) {
 	}	
 }
 
-TileData* MotionEstimationData::getTile(UInt idTile) {
+TileData* MotionEstimationData::getTile(Int idTile) {
 	if( tiles[idTile] == NULL ) {
 		tiles[idTile] = new TileData();
 	}
 	return tiles[idTile];
 }
 
-void MotionEstimationData::insertRefFrame(UInt idRefFrame) {
+void MotionEstimationData::insertRefFrame(Int idRefFrame) {
     this->refFrames.insert(idRefFrame);
+	
 }
 
 void MotionEstimationData::report() {
@@ -27,4 +28,16 @@ void MotionEstimationData::report() {
         cout << "TILE " << i << endl;
 		this->tiles[i]->report();
     }
+}
+
+void MotionEstimationData::setRefFrames(set<Int> refFrames) {
+	this->refFrames = refFrames;
+}
+
+set<Int> MotionEstimationData::getRefFrames() const {
+	return refFrames;
+}
+
+Int MotionEstimationData::getIdCurrFrame() const {
+	return idCurrFrame;
 }

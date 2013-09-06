@@ -9,12 +9,14 @@ using namespace std;
 
 class TileData {
 private:
-    list<CTUData*> listCTU;
+    vector<CTUData*> listCTU;
 public:
     TileData();
     
     void insertCTU(CTUData* ctu);
-    CTUData* getNextCTU();
+    CTUData* getCTU(Int id);
+	
+	Int getNumOfCTU();
     
     void report();
 };

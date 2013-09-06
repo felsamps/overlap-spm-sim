@@ -8,15 +8,20 @@ void TileData::insertCTU(CTUData* ctu) {
 	listCTU.push_back(ctu);
 }
 
-CTUData* TileData::getNextCTU() {
-	CTUData* returnable = this->listCTU.front();
-	this->listCTU.pop_front();
-	return returnable;
+CTUData* TileData::getCTU(Int id) {
+	if(id >= this->listCTU.size()) {
+		return NULL;
+	}
+	return this->listCTU[id];
+}
+
+Int TileData::getNumOfCTU() {
+	return this->listCTU.size();
 }
 
 void TileData::report() {
 	cout << "CTUS " << this->listCTU.size() << endl;
-	for(list<CTUData*>::iterator it = listCTU.begin(); it != listCTU.end(); it++) {
+	for(vector<CTUData*>::iterator it = listCTU.begin(); it != listCTU.end(); it++) {
 		(*it)->report();
 	}
 }

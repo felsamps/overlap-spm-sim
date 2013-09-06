@@ -18,30 +18,30 @@ class TraceFileHandler {
 private:
 	fstream fp;
 	
-	UInt wFrame;
-	UInt hFrame;
-	UInt numTileColumns;
-	UInt numTileRows;
-	UInt searchRange;
-	UInt numOfTiles;
-	UInt numVerTilesBoundaries;
-	UInt numHorTilesBoundaries;
+	Int wFrame;
+	Int hFrame;
+	Int numTileColumns;
+	Int numTileRows;
+	Int searchRange;
+	Int numOfTiles;
+	Int numVerTilesBoundaries;
+	Int numHorTilesBoundaries;
 
 	void xParseHeader();
-	MotionEstimationData* xGetMotionEstimationDataEntry(UInt idRefFrame);
+	MotionEstimationData* xGetMotionEstimationDataEntry(Int idRefFrame);
     
 public:
 	TraceFileHandler(string name);
 	MotionEstimationData* parseNextFrame();
     
-	UInt getNumHorTilesBoundaries() const;
-    UInt getNumVerTilesBoundaries() const;
-    UInt getNumOfTiles() const;
-    UInt getSearchRange() const;
-    UInt getNumTileRows() const;
-    UInt getNumTileColumns() const;
-    UInt getHFrame() const;
-    UInt getWFrame() const;
+	Int getNumHorTilesBoundaries() const;
+    Int getNumVerTilesBoundaries() const;
+    Int getNumOfTiles() const;
+    Int getSearchRange() const;
+    Int getNumTileRows() const;
+    Int getNumTileColumns() const;
+    Int getHFrame() const;
+    Int getWFrame() const;
 };
 
 #endif	/* TRACEFILEHANDLER_H */
