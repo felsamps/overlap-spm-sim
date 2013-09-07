@@ -26,7 +26,7 @@ private:
 	long long int acumTimeInstant;
 	
 	void xUpdatePowerState(pair<Int,Int> acc);
-	void xUpdatePowerCounters();
+	
 public:
     OvSPM(Int length, Int thickness, Int center, Int numOfCores);
 	
@@ -34,6 +34,7 @@ public:
 	void initPowerStates();
 	void updatePowerStates();
 	void updateOverlapUsage();
+	void updatePowerCounters();
 	
 	SPMStatus read(Int lBU, Int tBU, Int reqCore);
 	void write(Int lBU, Int tBU);
@@ -46,6 +47,7 @@ public:
     Int getOvThicknessInBU() const;
 	
 	void report();
+	pair<double,double> reportPower();
 };
 
 #endif	/* OVSPM_H */

@@ -93,7 +93,7 @@ void OvSPM::xUpdatePowerState(pair<Int,Int> acc) {
 	
 }
 
-void OvSPM::xUpdatePowerCounters() {
+void OvSPM::updatePowerCounters() {
 	this->acumS0 += this->stateSet[S0].size();
 	this->acumS1 += this->stateSet[S1].size();
 	this->acumS2 += this->stateSet[S2].size();
@@ -115,7 +115,7 @@ SPMStatus OvSPM::read(Int lBU, Int tBU, Int reqCore) {
 		}
 		this->coreMap[lPos][tPos][reqCore] = true;							
 		xUpdatePowerState(make_pair<int,int>(lPos, tPos));
-		xUpdatePowerCounters();
+		updatePowerCounters();
 		return returnable;
 	}
 		
@@ -179,4 +179,21 @@ void OvSPM::report() {
 	cout << "W23 " << this->acumW23 << endl;
 	cout << "W13 " << this->acumW13 << endl;
 	
+}
+
+pair<double,double> OvSPM::reportPower() {
+	double energyWOPG = this->acumTimeInstant * this->ovThicknessInBU * this->ovLengthInBU * E_S3; //always in FULL VDD
+	double energyWithPG = this->acumS0 * E_S0 +
+							this->acumS1 * E_S1 +
+							this->acumS2 * E_S2 +
+							this->acumS3 * E_S3 +
+							this->acumW03 * E_W03 +
+							this->acumW13 * E_W13 +
+							this->acumW23 * E_W23;
+	double savings = (energyWOPG-energyWithPG) / energyWOPG;
+	cout << "E(WO PG) " << energyWOPG << endl;
+	cout << "E(With PG) " << energyWithPG << endl;
+	cout << "SAVINGS " << savings << endl;
+	
+	return make_pair<double,double>(energyWOPG, energyWithPG);
 }

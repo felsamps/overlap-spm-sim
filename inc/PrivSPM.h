@@ -27,8 +27,6 @@ private:
 	long long int acumW03, acumW13, acumW23;
 	long long int acumTimeInstant;
 	
-	bool xCheckLimits(Int xBU, Int yBU);
-	
 	void xUpdatePowerState(pair<Int,Int> acc);
 	void xUpdatePowerCounters();
 public:
@@ -39,9 +37,12 @@ public:
 	
 	SPMStatus read(Int lBU, Int tBU);
 	void write(Int lBU, Int tBU);
+	
+	bool checkLimits(Int xBU, Int yBU);
 
 	void report();
-	void reportPower();
+	pair<double,double> reportPower();
+	void reportPowerStates();
 };
 
 #endif	/* PRIVSPM_H */

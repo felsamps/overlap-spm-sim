@@ -25,6 +25,7 @@ private:
 	
 	void xParsePredFile(string fileName);
 	pair<char,OvSPM*> xIsInsideAnyOverlap(Int xBU, Int yBU);
+	void xUpdateOverlapCounters();
 	
 	long long int privHitCounter, privMissCounter;
 	long long int ovHitCounter, ovMissCounter;
@@ -42,6 +43,7 @@ public:
 	void updatePowerCounters();
 	void updateOverlapUsages();
 	void report();
+	void reportPrivPowerStates();
 };
 
 #endif	/* SPMMANAGER_H */

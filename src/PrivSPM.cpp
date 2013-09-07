@@ -150,9 +150,7 @@ void PrivSPM::report() {
 	}
 	cout << endl;
 	getchar();
-}
-
-void PrivSPM::reportPower() {
+	
 	cout << "PrivSPM Report!" << endl;
 	cout << "S0 " << this->acumS0 << endl;
 	cout << "S1 " << this->acumS1 << endl;
@@ -161,4 +159,28 @@ void PrivSPM::reportPower() {
 	cout << "W03 " << this->acumW03 << endl;
 	cout << "W23 " << this->acumW23 << endl;
 	cout << "W13 " << this->acumW13 << endl;
+}
+
+pair<double,double> PrivSPM::reportPower() {
+	double energyWOPG = this->acumTimeInstant * this->searchWindowInBU * this->searchWindowInBU * E_S3; //always in FULL VDD
+	double energyWithPG = this->acumS0 * E_S0 +
+							this->acumS1 * E_S1 +
+							this->acumS2 * E_S2 +
+							this->acumS3 * E_S3 +
+							this->acumW03 * E_W03 +
+							this->acumW13 * E_W13 +
+							this->acumW23 * E_W23;
+	double savings = (energyWOPG-energyWithPG) / energyWOPG;
+	cout << "E(WO PG) " << energyWOPG << endl;
+	cout << "E(With PG) " << energyWithPG << endl;
+	cout << "SAVINGS " << savings << endl;
+	
+	return make_pair<double,double>(energyWOPG, energyWithPG);
+}
+
+void PrivSPM::reportPowerStates() {
+	cerr << this->stateSet[S0].size() << " ";
+	cerr << this->stateSet[S1].size() << " ";
+	cerr << this->stateSet[S2].size() << " ";
+	cerr << this->stateSet[S3].size() << endl;
 }

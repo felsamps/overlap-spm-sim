@@ -89,6 +89,15 @@ pair<char,OvSPM*> SPMManager::xIsInsideAnyOverlap(Int xBU, Int yBU) {
 	return make_pair<char, OvSPM*>('N',NULL);;
 }
 
+void SPMManager::xUpdateOverlapCounters() {
+	for (int ver = 0; ver < this->tfh->getNumVerTilesBoundaries(); ver++) {
+		this->verShared[ver]->updatePowerCounters();
+	}
+	for (int hor = 0; hor < this->tfh->getNumHorTilesBoundaries(); hor++) {
+		this->horShared[hor]->updatePowerCounters();
+	}
+}
+
 void SPMManager::handleDataRequest(Int xReq, Int yReq, Int size, Int reqCore) {
 	/*Serialize the request into BU accesses*/
 	for (int y = yReq/BU_SIZE; y < (yReq+size)/BU_SIZE; y+=1) {
@@ -134,7 +143,9 @@ void SPMManager::handleDataRequest(Int xReq, Int yReq, Int size, Int reqCore) {
 				else {
 					this->privHitCounter += 1;
 				}
+				xUpdateOverlapCounters();
 			}	
+			
 		}
 	}
 		
@@ -161,13 +172,33 @@ void SPMManager::report() {
 	cout << "(" << overlapPctg << ")" << endl;
 	this->offChip->report();
 	this->offChipWithoutSPM->report();
+	
+	pair<double,double> p;	
+	double energyWOPG = 0, energyWithPG = 0;
 	for (int c = 0; c < this->tfh->getNumOfTiles(); c++) {
-		this->corePrivate[c]->reportPower();
+		cout << "PRIV POWER " << c << endl;
+		p = this->corePrivate[c]->reportPower();
+		energyWOPG += p.first;
+		energyWithPG += p.second;
 	}
 	for (int ver = 0; ver < this->tfh->getNumVerTilesBoundaries(); ver++) {
-		this->verShared[ver]->report();
+		cout << "VER OV POWER " << ver << endl;
+		p = this->verShared[ver]->reportPower();
+		energyWOPG += p.first;
+		energyWithPG += p.second;
 	}
 	for (int hor = 0; hor < this->tfh->getNumHorTilesBoundaries(); hor++) {
-		this->horShared[hor]->report();
+		cout << "HOR OV POWER " << hor << endl;
+		p = this->horShared[hor]->reportPower();
+		energyWOPG += p.first;
+		energyWithPG += p.second;
 	}
+	
+	cout << "TOTAL ENERGY " << energyWOPG << " " << energyWithPG << endl;
+	cout << "TOTAL SAVINGS " << (energyWOPG-energyWithPG)/energyWOPG << endl;
+}
+
+void SPMManager::reportPrivPowerStates() {
+	this->corePrivate[0]->reportPowerStates();
+	
 }
