@@ -27,7 +27,7 @@ public:
 	void insertOverlapUsage(Int usageOverlap);
 	void predict(Int D, Int ovThickness);
 	
-	bool isOverlap(Int xBU, Int yBU);
+	bool isOverlap(Int lengthBU, Int thicknessBU);
 	
 	Int getCenter() const;
 	Int getOvLengthInBU() const;

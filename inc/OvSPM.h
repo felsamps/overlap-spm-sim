@@ -32,7 +32,8 @@ public:
 	
 	void reset();
 	void initPowerStates();
-	void updatePowerStates();
+	void managePowerStatesVer(vector<bool**> priv, Int** ovMap);
+	void managePowerStatesHor(vector<bool**> priv, Int** ovMap);
 	void updateOverlapUsage();
 	void updatePowerCounters();
 	

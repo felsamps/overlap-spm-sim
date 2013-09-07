@@ -19,13 +19,15 @@ private:
     vector<OvSPM*> horShared;
     vector<PrivSPM*> corePrivate;
 	
-	bool** ovMap;
+	Int** ovMap;
 	
 	TraceFileHandler* tfh;
 	
 	void xParsePredFile(string fileName);
 	pair<char,OvSPM*> xIsInsideAnyOverlap(Int xBU, Int yBU);
 	void xUpdateOverlapCounters();
+	
+	void xUpdateOverlapUsageMap();
 	
 	long long int privHitCounter, privMissCounter;
 	long long int ovHitCounter, ovMissCounter;
@@ -36,6 +38,7 @@ public:
 	
 	void init(Int D);
 	
+	void manageOvSPM_CTULevel();
 	void manageSPM_CTULevel(Int idTile, Int xCenter, Int yCenter);
 	void manageSPMFrameLevel();
 	void handleDataRequest(Int xReq, Int yReq, Int size, Int reqCore);

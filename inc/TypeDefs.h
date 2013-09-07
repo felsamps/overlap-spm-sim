@@ -22,7 +22,7 @@ typedef int Int;
 #define E_S1 0.3
 #define E_S0 0
 
-#define E_WAKE 1
+#define E_WAKE 4
 
 #define E_W23 E_WAKE * 0.35
 #define E_W12 E_WAKE * 0.35

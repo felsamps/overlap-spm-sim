@@ -62,8 +62,56 @@ void OvSPM::initPowerStates() {
 	}
 }
 
-void OvSPM::updatePowerStates() {
-	//TODO implement it
+void OvSPM::managePowerStatesHor(vector<bool**> priv, Int** ovMap) {
+	for (int l = 0; l < this->ovLengthInBU; l++) {
+		for (int t = 0; t < this->ovPred->getActualOvThicknessInBU(); t++) {
+			Int tBU = t + this->ovPred->getDispA();
+			Int lBU = l;
+			
+			bool limitsFlag = false;
+			for (int c = 0; c < priv.size(); c++) {
+				if(priv[c][lBU][tBU]) {
+					limitsFlag = true;
+					break;
+				}
+			}
+			if(!limitsFlag) { //no search window intersects the corresponding overlap position
+				PowerState toBeAssigned;
+				pair<Int,Int> p(l,t);
+				//TODO review it
+				toBeAssigned = (ovMap[l][t] >= 2) ? S2 : S1;
+				this->stateSet[this->powerMap[l][t]].erase(p);
+				this->stateSet[toBeAssigned].insert(p);
+				this->powerMap[l][t] = toBeAssigned;
+			}
+		}	
+	}
+}
+
+void OvSPM::managePowerStatesVer(vector<bool**> priv, Int** ovMap) {
+	for (int l = 0; l < this->ovLengthInBU; l++) {
+		for (int t = 0; t < this->ovPred->getActualOvThicknessInBU(); t++) {
+			Int tBU = t + this->ovPred->getDispA();
+			Int lBU = l;
+			
+			bool limitsFlag = false;
+			for (int c = 0; c < priv.size(); c++) {
+				if(priv[c][tBU][lBU]) {
+					limitsFlag = true;
+					break;
+				}
+			}
+			if(!limitsFlag) { //no search window intersects the corresponding overlap position
+				PowerState toBeAssigned;
+				pair<Int,Int> p(l,t);
+				//TODO review it
+				toBeAssigned = (ovMap[t][l] >= 2) ? S2 : S1;
+				this->stateSet[this->powerMap[l][t]].erase(p);
+				this->stateSet[toBeAssigned].insert(p);
+				this->powerMap[l][t] = toBeAssigned;
+			}
+		}	
+	}
 }
 
 void OvSPM::xUpdatePowerState(pair<Int,Int> acc) {

@@ -11,7 +11,7 @@ SPMManager::SPMManager(TraceFileHandler* tfh) {
 	
 	//TODO initialize PrivSPMs
 	for (int p = 0; p < this->tfh->getNumOfTiles(); p++) {
-		PrivSPM* priv = new PrivSPM(this->tfh->getSearchRange());
+		PrivSPM* priv = new PrivSPM(this->tfh->getWFrame(), this->tfh->getHFrame(), this->tfh->getSearchRange());
 		this->corePrivate.push_back(priv);
 	}
 	//TODO initialize OvSPMs
@@ -35,6 +35,32 @@ SPMManager::SPMManager(TraceFileHandler* tfh) {
 	this->ovMissCounter = 0;
 	this->overallBUAcc = 0;
 	
+	Int wFrameInBU = this->tfh->getWFrame() / BU_SIZE;
+	Int hFrameInBU = this->tfh->getHFrame() / BU_SIZE;
+	this->ovMap = new Int*[wFrameInBU];
+	for (int i = 0; i < wFrameInBU; i++) {
+		this->ovMap[i] = new Int[hFrameInBU];
+	}	
+}
+
+void SPMManager::xUpdateOverlapUsageMap() {
+	Int wFrameInBU = this->tfh->getWFrame() / BU_SIZE;
+	Int hFrameInBU = this->tfh->getHFrame() / BU_SIZE;
+	
+	for (int y = 0; y < hFrameInBU; y++) {
+		for (int x = 0; x < wFrameInBU; x++) {
+			Int acum = 0;
+			for (int ver = 0; ver < this->tfh->getNumVerTilesBoundaries(); ver++) {
+				OverlapPredictor* pred = this->verShared[ver]->getOvPred();
+				acum += (pred->isOverlap(y,x)) ? 1 : 0;
+			}
+			for (int hor = 0; hor < this->tfh->getNumVerTilesBoundaries(); hor++) {
+				OverlapPredictor* pred = this->horShared[hor]->getOvPred();
+				acum += (pred->isOverlap(x,y)) ? 1 : 0;
+			}
+			this->ovMap[x][y] = acum;
+		}
+	}
 }
 
 void SPMManager::init(Int D) {
@@ -51,16 +77,36 @@ void SPMManager::init(Int D) {
 		this->horShared[hor]->reset();
 		this->horShared[hor]->getOvPred()->predict(D, this->horShared[hor]->getOvThicknessInBU());
 	}
+	
+	xUpdateOverlapUsageMap();
 	//
 }
 
+void SPMManager::manageOvSPM_CTULevel() {
+	/*TODO scan the active memory sectors*/
+	/*TODO check if the current sector is inside a search window*/
+	/*TODO put S0 and S1 state depending on the overlap static usage*/
+	//cout << "OV_CTU_MAN" << endl;
+	vector<bool**> limits;
+	for (int i = 0; i < this->tfh->getNumOfTiles(); i++) {
+		limits.push_back(this->corePrivate[i]->getSearchLimits());
+	}	
+	for (int ver = 0; ver < this->tfh->getNumVerTilesBoundaries(); ver++) {
+		this->verShared[ver]->managePowerStatesVer(limits, this->ovMap);
+	}
+	for (int hor = 0; hor < this->tfh->getNumHorTilesBoundaries(); hor++) {
+		this->horShared[hor]->managePowerStatesHor(limits, this->ovMap);
+	}
+}
 
 void SPMManager::manageSPM_CTULevel(Int idTile, Int xCenter, Int yCenter) {
+	//cout << "PRIV_CTU_MAN" << endl;
 	PrivSPM* priv = this->corePrivate[idTile];
-	priv->initPowerStates(xCenter, yCenter, this->verShared, this->horShared);	
+	priv->initPowerStates(xCenter, yCenter, this->verShared, this->horShared);
 }
 
 void SPMManager::manageSPMFrameLevel() {	
+	//cout << "OV_FRAME_MAN" << endl;
 	for (int tiles = 0; tiles < this->tfh->getNumOfTiles(); tiles++) {
 		this->corePrivate[tiles]->reset();
 	}

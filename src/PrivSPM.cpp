@@ -1,6 +1,6 @@
 #include "../inc/PrivSPM.h"
 
-PrivSPM::PrivSPM(Int searchRange) {
+PrivSPM::PrivSPM(Int wFrame, Int hFrame, Int searchRange) {
 	this->searchWindowInBU = ((searchRange * 2) + CTU_SIZE) / BU_SIZE;
 	
 	this->powerMap = new PowerState* [this->searchWindowInBU];
@@ -9,6 +9,13 @@ PrivSPM::PrivSPM(Int searchRange) {
 		this->powerMap[x] = new PowerState [this->searchWindowInBU];
 		this->contentMap[x] = new pair<Int,Int>[this->searchWindowInBU];
 	}	
+	
+	this->wFrameInBU = wFrame / BU_SIZE;
+	this->hFrameInBU = hFrame / BU_SIZE;
+	this->searchLimits = new bool*[this->wFrameInBU];
+	for (int i = 0; i < this->wFrameInBU; i++) {
+		this->searchLimits[i] = new bool[this->hFrameInBU];
+	}
 	
 	cout << "Private SPM Created: " << this->searchWindowInBU << endl;
 
@@ -34,13 +41,47 @@ void PrivSPM::reset() {
 			this->contentMap[x][y] = make_pair<Int,Int>(-999,-999);
 		}
 	}
+}
 
+void PrivSPM::xUpdateSearchLimits() {
+	Int xLeft = this->xCenter - this->searchWindowInBU/2;
+	Int xRight = this->xCenter - this->searchWindowInBU/2;
+	Int yTop = this->yCenter + this->searchWindowInBU/2;
+	Int yBottom = this->yCenter + this->searchWindowInBU/2;
+	
+	for (int x = 0; x < this->wFrameInBU; x++) {
+		for (int y = 0; y < this->hFrameInBU; y++) {
+			this->searchLimits[x][y] = 
+					(x >= xLeft and x < xRight and y >= yTop and y < yBottom) ? 
+						true : false;
+		}
+	}
+}
+
+bool PrivSPM::checkLimitsHorPerspective(Int lBU, Int tBU) {
+	Int xLeft = this->xCenter - this->searchWindowInBU/2;
+	Int xRight = this->xCenter - this->searchWindowInBU/2;
+	Int yTop = this->yCenter + this->searchWindowInBU/2;
+	Int yBottom = this->yCenter + this->searchWindowInBU/2;
+	
+	return (tBU >= xLeft and tBU < xRight and lBU >= yTop and lBU < yBottom);
+}
+
+bool PrivSPM::checkLimitsVerPerspective(Int lBU, Int tBU) {
+	Int xLeft = this->xCenter - this->searchWindowInBU/2;
+	Int xRight = this->xCenter - this->searchWindowInBU/2;
+	Int yTop = this->yCenter + this->searchWindowInBU/2;
+	Int yBottom = this->yCenter + this->searchWindowInBU/2;
+	
+	return (lBU >= xLeft and lBU < xRight and tBU >= yTop and tBU < yBottom);
 }
 
 void PrivSPM::initPowerStates(Int xCenter, Int yCenter, vector<OvSPM*> verOvSPM, vector<OvSPM*> horOvSPM) {
 	//TODO fix the centering displacement
 	this->xCenter = xCenter / BU_SIZE;
 	this->yCenter = yCenter / BU_SIZE;
+	
+	this->xUpdateSearchLimits();
 		
 	for (int yBU = 0; yBU < this->searchWindowInBU; yBU++) {
 		for (int xBU = 0; xBU < this->searchWindowInBU; xBU++) {

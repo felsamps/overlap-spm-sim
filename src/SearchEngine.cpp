@@ -41,6 +41,7 @@ void SearchEngine::performSearch() {
 			
 			Int numOfCTU = this->xGetMaxNumOfCTU(meData);
 			for (int idCTU = 0; idCTU < numOfCTU; idCTU++) {
+				this->spm->manageOvSPM_CTULevel();
 				
 				for (int idTile = 0; idTile < this->tfh->getNumOfTiles(); idTile++) {
 					TileData* tileData = meData->getTile(idTile);
@@ -70,6 +71,7 @@ void SearchEngine::xHandlePUAccess(PUData* pu, Int sizeCU, Int idTile) {
 	Int numOfCandidates;
 	
 	this->spm->manageSPM_CTULevel(idTile, pu->getXCenter(), pu->getYCenter());
+	
 	//this->spm->reportPrivPowerStates();
 			
 	while(e != NULL) {

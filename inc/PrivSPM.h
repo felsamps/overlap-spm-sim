@@ -8,6 +8,7 @@
 #include "OverlapPredictor.h"
 #include "OvSPM.h"
 
+
 using namespace std;
 
 class PrivSPM {
@@ -20,6 +21,9 @@ private:
 	Int xCenter, yCenter;
 	Int searchWindowInBU;
 	
+	Int wFrameInBU, hFrameInBU;
+	bool** searchLimits;
+	
 	long long int writeAcum, readAcum;
 	
 	vector<set<pair<Int,Int> > > stateSet;
@@ -29,8 +33,9 @@ private:
 	
 	void xUpdatePowerState(pair<Int,Int> acc);
 	void xUpdatePowerCounters();
+	void xUpdateSearchLimits();
 public:
-    PrivSPM(Int searchRange);
+    PrivSPM(Int wFrame, Int hFrame, Int searchRange);
 	
 	void reset();
 	void initPowerStates(Int xCenter, Int yCenter, vector<OvSPM*> verOvSPM, vector<OvSPM*> horOvSPM);
@@ -38,11 +43,14 @@ public:
 	SPMStatus read(Int lBU, Int tBU);
 	void write(Int lBU, Int tBU);
 	
-	bool checkLimits(Int xBU, Int yBU);
+	bool checkLimitsHorPerspective(Int lBU, Int tBU);
+	bool checkLimitsVerPerspective(Int lBU, Int tBU);
 
 	void report();
 	pair<double,double> reportPower();
 	void reportPowerStates();
+	
+	bool** getSearchLimits() { return this->searchLimits; }
 };
 
 #endif	/* PRIVSPM_H */
