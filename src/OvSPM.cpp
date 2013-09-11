@@ -161,7 +161,7 @@ SPMStatus OvSPM::read(Int lBU, Int tBU, Int reqCore) {
 			this->statMap[lPos][tPos] += 1;
 			this->readAcum += BU_SIZE*BU_SIZE;
 		}
-		this->coreMap[lPos][tPos][reqCore] = true;							
+		//this->coreMap[lPos][tPos][reqCore] = true;							
 		xUpdatePowerState(make_pair<int,int>(lPos, tPos));
 		updatePowerCounters();
 		return returnable;
@@ -230,6 +230,7 @@ void OvSPM::report() {
 }
 
 pair<double,double> OvSPM::reportPower() {
+	report();
 	double energyWOPG = this->acumTimeInstant * this->ovThicknessInBU * this->ovLengthInBU * E_S3; //always in FULL VDD
 	double energyWithPG = this->acumS0 * E_S0 +
 							this->acumS1 * E_S1 +
@@ -244,4 +245,12 @@ pair<double,double> OvSPM::reportPower() {
 	cout << "SAVINGS " << savings << endl;
 	
 	return make_pair<double,double>(energyWOPG, energyWithPG);
+}
+
+
+void OvSPM::reportPowerStates() {
+	cerr << this->stateSet[S0].size() << " ";
+	cerr << this->stateSet[S1].size() << " ";
+	cerr << this->stateSet[S2].size() << " ";
+	cerr << this->stateSet[S3].size() << endl;
 }

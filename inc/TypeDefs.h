@@ -4,18 +4,19 @@
 typedef int Int;
 
 #define DEBUG_EN 0
+#define OVERLAP_PREDICTOR_EN 0
 
-#define OV_THICKNESS_FACTOR 2.3
+#define OV_THICKNESS_FACTOR 0
 #define BU_SIZE 16
 #define CTU_SIZE 64
 
 #define SPM_MISS false
 #define SPM_HIT true
 
-#define PRED_FACT_0 0
-#define PRED_FACT_1 1
-#define PRED_FACT_2 2
-#define PRED_FACT_3 3
+#define PRED_FACT_0 2
+#define PRED_FACT_1 2.5
+#define PRED_FACT_2 3
+#define PRED_FACT_3 3.5
 
 #define E_S3 1
 #define E_S2 0.5

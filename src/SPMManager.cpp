@@ -54,7 +54,7 @@ void SPMManager::xUpdateOverlapUsageMap() {
 				OverlapPredictor* pred = this->verShared[ver]->getOvPred();
 				acum += (pred->isOverlap(y,x)) ? 1 : 0;
 			}
-			for (int hor = 0; hor < this->tfh->getNumVerTilesBoundaries(); hor++) {
+			for (int hor = 0; hor < this->tfh->getNumHorTilesBoundaries(); hor++) {
 				OverlapPredictor* pred = this->horShared[hor]->getOvPred();
 				acum += (pred->isOverlap(x,y)) ? 1 : 0;
 			}
@@ -244,7 +244,8 @@ void SPMManager::report() {
 	cout << "TOTAL SAVINGS " << (energyWOPG-energyWithPG)/energyWOPG << endl;
 }
 
-void SPMManager::reportPrivPowerStates() {
-	this->corePrivate[0]->reportPowerStates();
+void SPMManager::reportPowerStates() {
+	//this->corePrivate[0]->reportPowerStates();
+	this->verShared[0]->reportPowerStates();
 	
 }

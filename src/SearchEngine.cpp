@@ -56,6 +56,7 @@ void SearchEngine::performSearch() {
 							}
 						}
 					}
+					//this->spm->reportPowerStates();	
 				}
 			}
 			this->spm->updateOverlapUsages();
@@ -72,7 +73,6 @@ void SearchEngine::xHandlePUAccess(PUData* pu, Int sizeCU, Int idTile) {
 	
 	this->spm->manageSPM_CTULevel(idTile, pu->getXCenter(), pu->getYCenter());
 	
-	//this->spm->reportPrivPowerStates();
 			
 	while(e != NULL) {
 		switch(e->opcode) {
@@ -94,11 +94,11 @@ void SearchEngine::xHandlePUAccess(PUData* pu, Int sizeCU, Int idTile) {
 				this->spm->handleDataRequest(e->xCand, e->yCand, sizeCU, idTile);
 				break;
 			case 'R':
-				/*for (int y = e->yTop; y < e->yBottom; y++) {
-					for (int x = e->xLeft; x < e->xRight; x++) {
+				for (int y = e->yTop; y < e->yBottom; y+= BU_SIZE) {
+					for (int x = e->xLeft; x < e->xRight; x+= BU_SIZE) {
 						this->spm->handleDataRequest(x, y, sizeCU, idTile);
 					}
-				}*/
+				}
 
 				break;
 		}

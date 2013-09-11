@@ -39,11 +39,11 @@ pair<double, double> OverlapPredictor::xCalcNormDistribution() {
 }
 
 void OverlapPredictor::predict(Int D, Int ovThickness) {
+	
+#if OVERLAP_PREDICTOR_EN
 	pair<double,double> normDist = xCalcNormDistribution();
 	double mean = normDist.first;
 	double stdDev = normDist.second;
-	//this->actualOvThicknessInBU = ovThickness;
-	
 	if(mean == 0 and stdDev == 0) {
 		this->actualOvThicknessInBU = ovThickness;
 	}
@@ -57,6 +57,10 @@ void OverlapPredictor::predict(Int D, Int ovThickness) {
 		cout << "PREDICT " << mean << " " << stdDev << " " << ovPredSizeInBU << endl;
 		this->actualOvThicknessInBU = (ceil(ovPredSizeInBU/this->ovLengthInBU) > ovThickness) ? ovThickness : ceil(ovPredSizeInBU/this->ovLengthInBU);
 	}
+#else
+	this->actualOvThicknessInBU = ovThickness;
+#endif
+
 	this->dispA = (this->center/BU_SIZE - ceil((this->actualOvThicknessInBU)/2.0));
 	this->dispB = (this->center/BU_SIZE + ceil((this->actualOvThicknessInBU)/2.0));
 	

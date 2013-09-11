@@ -46,7 +46,7 @@ public:
 	void updatePowerCounters();
 	void updateOverlapUsages();
 	void report();
-	void reportPrivPowerStates();
+	void reportPowerStates();
 };
 
 #endif	/* SPMMANAGER_H */

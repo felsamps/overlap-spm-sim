@@ -49,6 +49,7 @@ public:
 	
 	void report();
 	pair<double,double> reportPower();
+	void reportPowerStates();
 };
 
 #endif	/* OVSPM_H */
